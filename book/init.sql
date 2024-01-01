@@ -1,4 +1,4 @@
-```sql
+
 create table author (
     au_id int primary key auto_increment,
     au_name varchar(150),
@@ -39,22 +39,13 @@ create table book_cate (
     book_id int
 );
 
-alter table book_author add foreign key (au_id) references author(au_id);
-alter table book_author add foreign key (book_id) references book(book_id);
+alter table book_author add foreign key (au_id) references author(au_id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table book_author add foreign key (book_id) references book(book_id) ON DELETE CASCADE ON UPDATE CASCADE;
     
-alter table book_cate add foreign key (cat_id) references category(cat_id);
-alter table book_cate add foreign key (book_id) references book(book_id);
+alter table book_cate add foreign key (cat_id) references category(cat_id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table book_cate add foreign key (book_id) references book(book_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-alter table book add foreign key (sto_id) references storage(sto_id);
-```
-
-
-
-
-
-
-
-
+alter table book add foreign key (sto_id) references storage(sto_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO author (au_id, au_name, au_address, au_gender, au_nationality)
 VALUES
@@ -200,3 +191,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+
+-- DELETE FROM book WHERE book_id = 16;
