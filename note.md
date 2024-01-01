@@ -10,6 +10,6 @@
 1. Read requirements
 2. Run SQL queries on Command line **PHP MY ADMIN**
 3. Connect to db in server
-4. Exec the queries that generated in `step 2`
+4. Execute the queries that generated in `step 2`
 5. After getting the results, fill it in to your prepared `html`
 

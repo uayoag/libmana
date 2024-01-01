@@ -30,48 +30,60 @@
 
     <h2 class="header">Book Information</h2>
     <?php
-    // Replace these with your actual database connection details
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "library";
+    // Connect to db
+    include 'db.php';
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+ 
+    function getListBook($conn)
+    {
+        $sql = "SELECT b.book_id as bid, sto_shelf , au_name , cat_name , book_edition, book_publisher, book_year, book_title 
+        FROM book b 
+        LEFT JOIN book_author ON b.book_id = book_author.book_id 
+        LEFT JOIN author ON book_author.au_id = author.au_id 
+        LEFT JOIN storage ON b.sto_id = storage.sto_id 
+        LEFT JOIN book_cate ON b.book_id = book_cate.book_id 
+        LEFT JOIN category ON book_cate.cat_id = category.cat_id 
+        GROUP BY b.book_id;";
+        $result = $conn->query($sql);
+        return $result;
     }
 
-    // SQL query to retrieve book information with joins
-    $sql = "SELECT b.id, s.shelf AS storage, a.name AS author, c.name AS category, b.edition, b.publisher, b.year, b.title 
-            FROM book b
-            LEFT JOIN book_author ba ON b.id = ba.book_id
-            LEFT JOIN author a ON ba.author_id = a.id
-            LEFT JOIN storage s ON b.storage_id = s.id
-            LEFT JOIN book_cate bc ON b.id = bc.book_id
-            LEFT JOIN category c ON bc.category_id = c.id
-            GROUP BY b.id";
+    function getListAuthor($conn)
+    {
+        $sql = "SELECT au_id, au_name FROM author";
+        $result = $conn->query($sql);
+        return $result;
+    }
+    function getListStorage($conn)
+    {
+        $sql = "SELECT sto_id, sto_shelf FROM storage";
+        $result = $conn->query($sql);
+        return $result;
+    }
+    function getListCategory($conn)
+    {
+        $sql = "SELECT cat_id, cat_name FROM category";
+        $result = $conn->query($sql);
+        return $result;
+    }
+    $listOfBook = getListBook($conn);
 
-    $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        // Output table header
+    if ($listOfBook->num_rows > 0) {
+        // header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th><th>Title</th></tr>";
-
-        // Output data from each row
-        while ($row = $result->fetch_assoc()) {
+        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th></tr>";
+        // rows
+        while ($row = $listOfBook->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . $row["id"] . "</td>";
-            echo "<td>" . $row["storage"] . "</td>";
-            echo "<td>" . $row["author"] . "</td>";
-            echo "<td>" . $row["category"] . "</td>";
-            echo "<td>" . $row["edition"] . "</td>";
-            echo "<td>" . $row["publisher"] . "</td>";
-            echo "<td>" . $row["year"] . "</td>";
-            echo "<td>" . $row["title"] . "</td>";
+            echo "<td>" . $row["bid"] . "</td>";
+            echo "<td>" . $row["book_title"] . "</td>";
+            echo "<td>" . $row["sto_shelf"] . "</td>";
+            echo "<td>" . $row["au_name"] . "</td>";
+            echo "<td>" . $row["cat_name"] . "</td>";
+            echo "<td>" . $row["book_edition"] . "</td>";
+            echo "<td>" . $row["book_publisher"] . "</td>";
+            echo "<td>" . $row["book_year"] . "</td>";
             echo "</tr>";
         }
 
@@ -79,38 +91,81 @@
     } else {
         echo "No books found.";
     }
-
-    // Close connection
-    $conn->close();
     ?>
 
-<h2>Create New Book</h2>
+    <h2>Create New Book</h2>
 
-<form action="book/create.php" method="post">
-    <label for="title">Title:</label>
-    <input type="text" name="title" required>
+    <form action="book/create.php" method="post">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" name="title" required>
+        </div>
+        <div>
+            <label for="edition">Edition:</label>
+            <input type="text" name="edition" required>
+        </div>
 
-    <label for="edition">Edition:</label>
-    <input type="text" name="edition" required>
+        <div>
+            <label for="publisher">Publisher:</label>
+            <input type="text" name="publisher" required>
+        </div>
+        <div>
+            <label for="year">Year:</label>
+            <input type="number" name="year" required>
+        </div>
+        <div>
+            <label for="authorID">Author:</label>
+            <select name="authorID" required>
+                <option value="auto">Choose the author</option>
+                <?php
+                $listOfAuthor = getListAuthor($conn);
+                if ($listOfAuthor->num_rows > 0) {
+                    while ($author = $listOfAuthor->fetch_assoc()) {
+                        echo "<option value='{$author['au_id']}'>{$author['au_name']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div>
+            <label for="storageID">Storage:</label>
+            <select name="storageID" required>
+                <option value="auto">Choose the storage</option>
+                <?php
+                $listOfStorage = getListStorage($conn);
+                if ($listOfStorage->num_rows > 0) {
+                    while ($storage = $listOfStorage->fetch_assoc()) {
+                        echo "<option value='{$storage['sto_id']}'>{$storage['sto_shelf']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
 
-    <label for="publisher">Publisher:</label>
-    <input type="text" name="publisher" required>
+        <div>
+            <label for="categoryID">Category:</label>
+            <select name="categoryID" required>
+                <option value="auto">Choose the category</option>
+                <?php
+                $listOfCategory = getListCategory($conn);
+                if ($listOfCategory->num_rows > 0) {
+                    while ($category = $listOfCategory->fetch_assoc()) {
+                        echo "<option value='{$category['cat_id']}'>{$category['cat_name']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
 
-    <label for="year">Year:</label>
-    <input type="text" name="year" required>
-
-    <label for="authorID">Author ID:</label>
-    <input type="text" name="authorID" required>
-
-    <label for="storageID">Storage ID:</label>
-    <input type="text" name="storageID" required>
-
-    <label for="categoryID">Category ID:</label>
-    <input type="text" name="categoryID" required>
-
-    <input type="submit" value="Create Book">
-</form>
+        <input type="submit" value="Create Book">
+    </form>
 
 </body>
 
+
+
 </html>
+<?php
+// Close the database connection at the end of the file
+$conn->close();
+?>
