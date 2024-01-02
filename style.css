@@ -211,3 +211,9 @@ form div select{
     flex: 1;
     padding-right: 8px;
 }
+
+/* select multiple */
+
+.select-multiple{
+    height: 300px;
+}

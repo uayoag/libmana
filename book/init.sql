@@ -155,7 +155,6 @@ VALUES
 (14, 14),
 (15, 15);
 
-
 DELIMITER //
 
 CREATE PROCEDURE CreateNewBook(
@@ -163,9 +162,9 @@ CREATE PROCEDURE CreateNewBook(
     IN bookEdition VARCHAR(150),
     IN bookPublisher VARCHAR(150),
     IN bookYear VARCHAR(50),
-    IN authorID INT,
+    IN authorIDs VARCHAR(255), -- Assuming a comma-separated list of author IDs (e.g., '1,2,3')
     IN storageID INT,
-    IN categoryID INT
+    IN categoryIDs VARCHAR(255) -- Assuming a comma-separated list of category IDs (e.g., '1,2,3')
 )
 BEGIN
     DECLARE newBookID INT;
@@ -177,13 +176,29 @@ BEGIN
     -- Get the ID of the newly inserted book
     SET newBookID = LAST_INSERT_ID();
 
-    -- Associate the book with the author
-    INSERT INTO book_author (au_id, book_id)
-    VALUES (authorID, newBookID);
+    -- Split the comma-separated author IDs into a result set
+    CREATE TEMPORARY TABLE temp_author_ids (author_id INT);
+    INSERT INTO temp_author_ids (author_id)
+    SELECT CAST(author_id AS UNSIGNED) FROM STRING_SPLIT(authorIDs, ',');
 
-    -- Associate the book with the category
+    -- Associate each author with the new book
+    INSERT INTO book_author (au_id, book_id)
+    SELECT author_id, newBookID FROM temp_author_ids;
+
+    -- Drop the temporary table
+    DROP TEMPORARY TABLE IF EXISTS temp_author_ids;
+
+    -- Split the comma-separated category IDs into a result set
+    CREATE TEMPORARY TABLE temp_category_ids (category_id INT);
+    INSERT INTO temp_category_ids (category_id)
+    SELECT CAST(category_id AS UNSIGNED) FROM STRING_SPLIT(categoryIDs, ',');
+
+    -- Associate each category with the new book
     INSERT INTO book_cate (cat_id, book_id)
-    VALUES (categoryID, newBookID);
+    SELECT category_id, newBookID FROM temp_category_ids;
+
+    -- Drop the temporary table
+    DROP TEMPORARY TABLE IF EXISTS temp_category_ids;
 
     -- Display a success message or return the new book ID
     SELECT newBookID AS new_book_id;
@@ -191,6 +206,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
 
 
 

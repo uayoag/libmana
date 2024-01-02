@@ -36,14 +36,27 @@
  
     function getListBook($conn)
     {
-        $sql = "SELECT b.book_id as bid, sto_shelf , au_name , cat_name , book_edition, book_publisher, book_year, book_title 
-        FROM book b 
-        LEFT JOIN book_author ON b.book_id = book_author.book_id 
-        LEFT JOIN author ON book_author.au_id = author.au_id 
-        LEFT JOIN storage ON b.sto_id = storage.sto_id 
-        LEFT JOIN book_cate ON b.book_id = book_cate.book_id 
-        LEFT JOIN category ON book_cate.cat_id = category.cat_id 
-        GROUP BY b.book_id;";
+        $sql = "SELECT 
+        b.book_id,
+        b.book_title,
+        b.book_edition,
+        b.book_publisher,
+        b.book_year,
+        b.sto_id,
+        GROUP_CONCAT(DISTINCT a.au_name ORDER BY a.au_name ASC SEPARATOR ', ') AS authors,
+        GROUP_CONCAT(DISTINCT c.cat_name ORDER BY c.cat_name ASC SEPARATOR ', ') AS categories
+    FROM
+        book b
+    LEFT JOIN 
+        book_author ba ON b.book_id = ba.book_id
+    LEFT JOIN 
+        author a ON ba.au_id = a.au_id
+    LEFT JOIN 
+        book_cate bc ON b.book_id = bc.book_id
+    LEFT JOIN 
+        category c ON bc.cat_id = c.cat_id
+    GROUP BY 
+        b.book_id;";
         $result = $conn->query($sql);
         return $result;
     }
@@ -76,11 +89,11 @@
         // rows
         while ($row = $listOfBook->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . $row["bid"] . "</td>";
+            echo "<td>" . $row["book_id"] . "</td>";
             echo "<td>" . $row["book_title"] . "</td>";
-            echo "<td>" . $row["sto_shelf"] . "</td>";
-            echo "<td>" . $row["au_name"] . "</td>";
-            echo "<td>" . $row["cat_name"] . "</td>";
+            echo "<td>" . $row["sto_id"] . "</td>";
+            echo "<td>" . $row["authors"] . "</td>";
+            echo "<td>" . $row["categories"] . "</td>";
             echo "<td>" . $row["book_edition"] . "</td>";
             echo "<td>" . $row["book_publisher"] . "</td>";
             echo "<td>" . $row["book_year"] . "</td>";
@@ -114,9 +127,8 @@
             <input type="number" name="year" required>
         </div>
         <div>
-            <label for="authorID">Author:</label>
-            <select name="authorID" required>
-                <option value="auto">Choose the author</option>
+            <label for="authorIDs">Authors:</label>
+            <select name="authorIDs[]" multiple required>
                 <?php
                 $listOfAuthor = getListAuthor($conn);
                 if ($listOfAuthor->num_rows > 0) {
@@ -128,6 +140,20 @@
             </select>
         </div>
         <div>
+            <label for="categoryIDs">Categories:</label>
+            <select name="categoryIDs[]" multiple required>
+                <option value="auto">Choose the category</option>
+        <?php
+        $listOfCategories = getListCategory($conn);
+        if ($listOfCategories->num_rows > 0) {
+            while ($category = $listOfCategories->fetch_assoc()) {
+                echo "<option value='{$category['cat_id']}'>{$category['cat_name']}</option>";
+            }
+        }
+        ?>
+        </select>
+        </div>
+        <div>
             <label for="storageID">Storage:</label>
             <select name="storageID" required>
                 <option value="auto">Choose the storage</option>
@@ -136,21 +162,6 @@
                 if ($listOfStorage->num_rows > 0) {
                     while ($storage = $listOfStorage->fetch_assoc()) {
                         echo "<option value='{$storage['sto_id']}'>{$storage['sto_shelf']}</option>";
-                    }
-                }
-                ?>
-            </select>
-        </div>
-
-        <div>
-            <label for="categoryID">Category:</label>
-            <select name="categoryID" required>
-                <option value="auto">Choose the category</option>
-                <?php
-                $listOfCategory = getListCategory($conn);
-                if ($listOfCategory->num_rows > 0) {
-                    while ($category = $listOfCategory->fetch_assoc()) {
-                        echo "<option value='{$category['cat_id']}'>{$category['cat_name']}</option>";
                     }
                 }
                 ?>
