@@ -25,6 +25,12 @@
             <li>
                 <a href="storage.php">Storage</a>
             </li>
+            <li>
+                <a href="search.php">Search</a>
+            </li>
+            <li>
+                <a href="update.php">Update</a>
+            </li>
         </ul>
     </div>
 

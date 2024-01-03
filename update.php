@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <title>Book Page</title>
-</head>
-
-<body style="background: #e6a681;padding: 40px">
+<body style="background: #e6a681; padding: 40px">
     <div id="menu">
         <ul>
             <li>
@@ -33,8 +24,14 @@
             </li>
         </ul>
     </div>
-
-    <h2 class="header">Book Information</h2>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Update</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
     <?php
     // Connect to db
     include 'db.php';
@@ -87,33 +84,8 @@
     }
     $listOfBook = getListBook($conn);
 
-
-    if ($listOfBook->num_rows > 0) {
-        // header
-        echo "<table>";
-        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th></tr>";
-        // rows
-        while ($row = $listOfBook->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $row["book_id"] . "</td>";
-            echo "<td>" . $row["book_title"] . "</td>";
-            echo "<td>" . $row["sto_id"] . "</td>";
-            echo "<td>" . $row["authors"] . "</td>";
-            echo "<td>" . $row["categories"] . "</td>";
-            echo "<td>" . $row["book_edition"] . "</td>";
-            echo "<td>" . $row["book_publisher"] . "</td>";
-            echo "<td>" . $row["book_year"] . "</td>";
-            echo "</tr>";
-        }
-
-        echo "</table>";
-    } else {
-        echo "No books found.";
-    }
     ?>
-
-<h2>Create New Book</h2>
-
+    <h2>Create New Book</h2>
 <form action="book/create.php" method="post">
     <div>
         <label for="title">Title:</label>
@@ -176,10 +148,7 @@
 
     <input type="submit" value="Create Book">
 </form>
-
 </body>
-
-</html>
 <?php
 // Close the database connection at the end of the file
 $conn->close();

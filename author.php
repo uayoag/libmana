@@ -23,7 +23,13 @@
                 <a href="category.php">Category</a>
             </li>
             <li>
-                <a href="storage,php">Storage</a>
+                <a href="storage.php">Storage</a>
+            </li>
+            <li>
+                <a href="search.php">Search</a>
+            </li>
+            <li>
+                <a href="update.php">Update</a>
             </li>
         </ul>
     </div>
@@ -74,7 +80,10 @@
         </div>
         <div>
             <label for="gender">Gender:</label>
-            <input type="text" name="gender" required>
+            <select name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
         </div>
         <div>
             <label for="nationality">Nationality:</label>

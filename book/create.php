@@ -1,31 +1,19 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Replace these with your actual database connection details
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "library";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
+    include '../db.php';
+    
     // Get form data
     $title = $_POST["title"];
     $edition = $_POST["edition"];
     $publisher = $_POST["publisher"];
     $year = $_POST["year"];
-    $authors = $_POST["authorIDs"]; // Now an array of author IDs
+    $authors = $_POST["authorIDs"]; 
     $storageID = $_POST["storageID"];
     $categories = $_POST["categoryIDs"];
 
     // Insert into the book table
     $sql = "INSERT INTO book (sto_id, book_edition, book_publisher, book_year, book_title)
-            VALUES ($storageID, '$edition', '$publisher', '`$year', '$title');";
+            VALUES ($storageID, '$edition', '$publisher', '$year', '$title');";
 
     // Get the ID of the newly inserted book
     $sql .= "SET @newBookID = LAST_INSERT_ID();";
