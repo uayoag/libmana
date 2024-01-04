@@ -25,21 +25,23 @@
             <li>
                 <a href="storage.php">Storage</a>
             </li>
-            <li>
-                <a href="search.php">Search</a>
-            </li>
-            <li>
-                <a href="update.php">Update</a>
-            </li>
         </ul>
     </div>
 
     <h2 class="header">Book Information</h2>
+    <form method="GET" action="">
+        <div>
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="title" placeholder="Enter your search term">
+            <button type="submit">Search</button>
+        </div>
+
+    </form>
     <?php
     // Connect to db
     include 'db.php';
 
- 
+
     function getListBook($conn)
     {
         $sql = "SELECT 
@@ -60,13 +62,17 @@
     LEFT JOIN 
         book_cate bc ON b.book_id = bc.book_id
     LEFT JOIN 
-        category c ON bc.cat_id = c.cat_id
-    GROUP BY 
-        b.book_id;";
+        category c ON bc.cat_id = c.cat_id";
+
+        if (isset($_GET['title'])) {
+            $searchTitle = $_GET['title'];
+            $sql .= " WHERE b.book_title LIKE '%$searchTitle%' or b.book_edition LIKE '%$searchTitle%' or b.book_publisher LIKE '%$searchTitle%'";
+        }
+        $sql .= " GROUP BY b.book_id;";
+
         $result = $conn->query($sql);
         return $result;
     }
-
     function getListAuthor($conn)
     {
         $sql = "SELECT au_id, au_name FROM author";
@@ -112,70 +118,70 @@
     }
     ?>
 
-<h2>Create New Book</h2>
+    <h2>Create New Book</h2>
 
-<form action="book/create.php" method="post">
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" name="title" required>
-    </div>
-    <div>
-        <label for="edition">Edition:</label>
-        <input type="text" name="edition" required>
-    </div>
+    <form action="book/create.php" method="post">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" name="title" required>
+        </div>
+        <div>
+            <label for="edition">Edition:</label>
+            <input type="text" name="edition" required>
+        </div>
 
-    <div>
-        <label for="publisher">Publisher:</label>
-        <input type="text" name="publisher" required>
-    </div>
-    <div>
-        <label for="year">Year:</label>
-        <input type="number" name="year" required>
-    </div>
-    <div>
-        <label for="authorIDs">Authors:</label>
-        <select name="authorIDs[]" multiple required>
-            <?php
-            $listOfAuthor = getListAuthor($conn);
-            if ($listOfAuthor->num_rows > 0) {
-                while ($author = $listOfAuthor->fetch_assoc()) {
-                    echo "<option value='{$author['au_id']}'>{$author['au_name']}</option>";
+        <div>
+            <label for="publisher">Publisher:</label>
+            <input type="text" name="publisher" required>
+        </div>
+        <div>
+            <label for="year">Year:</label>
+            <input type="number" name="year" required>
+        </div>
+        <div>
+            <label for="authorIDs">Authors:</label>
+            <select name="authorIDs[]" multiple required>
+                <?php
+                $listOfAuthor = getListAuthor($conn);
+                if ($listOfAuthor->num_rows > 0) {
+                    while ($author = $listOfAuthor->fetch_assoc()) {
+                        echo "<option value='{$author['au_id']}'>{$author['au_name']}</option>";
+                    }
                 }
-            }
-            ?>
-        </select>
-    </div>
-    <div>
-        <label for="categoryIDs">Categories:</label>
-        <select name="categoryIDs[]" multiple required>
-            <option value="auto">Choose the category</option>
-    <?php
-    $listOfCategories = getListCategory($conn);
-    if ($listOfCategories->num_rows > 0) {
-        while ($category = $listOfCategories->fetch_assoc()) {
-            echo "<option value='{$category['cat_id']}'>{$category['cat_name']}</option>";
-        }
-    }
-    ?>
-    </select>
-    </div>
-    <div>
-        <label for="storageID">Storage:</label>
-        <select name="storageID" required>
-            <option value="auto">Choose the storage</option>
-            <?php
-            $listOfStorage = getListStorage($conn);
-            if ($listOfStorage->num_rows > 0) {
-                while ($storage = $listOfStorage->fetch_assoc()) {
-                    echo "<option value='{$storage['sto_id']}'>{$storage['sto_shelf']}</option>";
+                ?>
+            </select>
+        </div>
+        <div>
+            <label for="categoryIDs">Categories:</label>
+            <select name="categoryIDs[]" multiple required>
+                <option value="auto">Choose the category</option>
+                <?php
+                $listOfCategories = getListCategory($conn);
+                if ($listOfCategories->num_rows > 0) {
+                    while ($category = $listOfCategories->fetch_assoc()) {
+                        echo "<option value='{$category['cat_id']}'>{$category['cat_name']}</option>";
+                    }
                 }
-            }
-            ?>
-        </select>
-    </div>
+                ?>
+            </select>
+        </div>
+        <div>
+            <label for="storageID">Storage:</label>
+            <select name="storageID" required>
+                <option value="auto">Choose the storage</option>
+                <?php
+                $listOfStorage = getListStorage($conn);
+                if ($listOfStorage->num_rows > 0) {
+                    while ($storage = $listOfStorage->fetch_assoc()) {
+                        echo "<option value='{$storage['sto_id']}'>{$storage['sto_shelf']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
 
-    <input type="submit" value="Create Book">
-</form>
+        <input type="submit" value="Create Book">
+    </form>
 
 </body>
 

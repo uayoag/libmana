@@ -25,25 +25,58 @@
             <li>
                 <a href="storage.php">Storage</a>
             </li>
-            <li>
-                <a href="search.php">Search</a>
-            </li>
-            <li>
-                <a href="update.php">Update</a>
-            </li>
         </ul>
     </div>
 
     <h2 class="header">Storage Information</h2>
+    <form method="GET" action="">
+        <div>
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="title" placeholder="Enter your search term">
+            <button type="submit">Search</button>
+        </div>
+    </form>
     <?php
     include 'db.php';
 
-    function getListStorage($conn)
+    function getListBook($conn)
     {
-        $sql = "SELECT sto_id, sto_shelf, sto_block FROM storage";
+        $sql = "SELECT 
+        b.book_id,
+        b.book_title,
+        b.book_edition,
+        b.book_publisher,
+        b.book_year,
+        b.sto_id,
+        GROUP_CONCAT(DISTINCT a.au_name ORDER BY a.au_name ASC SEPARATOR ', ') AS authors,
+        GROUP_CONCAT(DISTINCT c.cat_name ORDER BY c.cat_name ASC SEPARATOR ', ') AS categories
+    FROM
+        book b
+    LEFT JOIN 
+        book_author ba ON b.book_id = ba.book_id
+    LEFT JOIN 
+        author a ON ba.au_id = a.au_id
+    LEFT JOIN 
+        book_cate bc ON b.book_id = bc.book_id
+    LEFT JOIN 
+        category c ON bc.cat_id = c.cat_id";
         $result = $conn->query($sql);
         return $result;
     }
+    function getListStorage($conn)
+    {
+        $sql = "SELECT book.book_title, storage.* FROM book
+                JOIN storage ON book.sto_id = storage.sto_id";
+        if (isset($_GET['title'])) {
+            $searchStorage = $_GET['title'];
+            $sql .= " WHERE storage.sto_shelf LIKE '%$searchStorage%' 
+                      OR storage.sto_block LIKE '%$searchStorage%' 
+                      OR book.book_title LIKE '%$searchStorage%'";
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+    
 
     $listOfStorage = getListStorage($conn);
 
@@ -64,6 +97,7 @@
         echo "No storage found.";
     }
     ?>
+
 
     <h2>Create New Storage</h2>
 
