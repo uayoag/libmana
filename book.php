@@ -137,6 +137,17 @@
     }
     $listOfBook = getListBook($conn);
 
+        function getBookDetails($conn, $bookID)
+    {
+        $sql = "SELECT * FROM book WHERE book_id = $bookID";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows == 1) {
+            return $result->fetch_assoc();
+        }
+
+        return null;
+    }
 
     if ($listOfBook->num_rows > 0) {
         // header
@@ -159,9 +170,12 @@
             echo '<input type="hidden" name="id" value="' . $row["book_id"] . '" />';
             echo '<input type="submit" value="Delete" />';
             echo '</form>';
+
             echo "<a href='book/update.php?book_id={$row['book_id']}'>Update</a>";
             echo "</td>";
             echo "</tr>";
+
+
         }
 
         echo "</table>";
@@ -234,85 +248,6 @@
 
         <input type="submit" value="Create Book">
     </form>
-
-
-    <h2>Edit Book</h2>
-
-
-    <?php
-    // Assume you have $bookDetails containing information about the book to be updated
-    // You can fetch this information based on the book ID
-    // Assuming $conn is already defined and connected
-    $bookID = 1; // Replace with the actual book ID
-    $bookDetails = getBookDetails($conn, $bookID); // Implement this function to get book details
-    ?>
-
-    <form action="book/update.php" method="POST">
-        <input type="hidden" name="bookID" value="<?php echo $bookDetails['book_id']; ?>">
-
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" name="title" value="<?php echo $bookDetails['book_title']; ?>" required>
-        </div>
-        <div>
-            <label for="edition">Edition:</label>
-            <input type="text" name="edition" value="<?php echo $bookDetails['book_edition']; ?>" required>
-        </div>
-
-        <div>
-            <label for="publisher">Publisher:</label>
-            <input type="text" name="publisher" value="<?php echo $bookDetails['book_publisher']; ?>" required>
-        </div>
-        <div>
-            <label for="year">Year:</label>
-            <input type="number" name="year" value="<?php echo $bookDetails['book_year']; ?>" required>
-        </div>
-        <div>
-            <label for="authorIDs">Authors:</label>
-            <select name="authorIDs[]" multiple required>
-                <?php
-                $listOfAuthor = getListAuthor($conn);
-                if ($listOfAuthor->num_rows > 0) {
-                    while ($author = $listOfAuthor->fetch_assoc()) {
-                        $selected = in_array($author['au_id'], $bookDetails['author_ids']) ? 'selected' : '';
-                        echo "<option value='{$author['au_id']}' $selected>{$author['au_name']}</option>";
-                    }
-                }
-                ?>
-            </select>
-        </div>
-        <div>
-            <label for="categoryIDs">Categories:</label>
-            <select name="categoryIDs[]" multiple required>
-                <?php
-                $listOfCategories = getListCategory($conn);
-                if ($listOfCategories->num_rows > 0) {
-                    while ($category = $listOfCategories->fetch_assoc()) {
-                        $selected = in_array($category['cat_id'], $bookDetails['category_ids']) ? 'selected' : '';
-                        echo "<option value='{$category['cat_id']}' $selected>{$category['cat_name']}</option>";
-                    }
-                }
-                ?>
-            </select>
-        </div>
-        <div>
-            <label for="storageID">Storage:</label>
-            <select name="storageID" required>
-                <?php
-                $listOfStorage = getListStorage($conn);
-                if ($listOfStorage->num_rows > 0) {
-                    while ($storage = $listOfStorage->fetch_assoc()) {
-                        $selected = ($storage['sto_id'] == $bookDetails['sto_id']) ? 'selected' : '';
-                        echo "<option value='{$storage['sto_id']}' $selected>{$storage['sto_shelf']}</option>";
-                    }
-                }
-                ?>
-            </select>
-        </div>
-
-        <input type="submit" value="Update Book">
-    </form>
-
 
 </body>
 
