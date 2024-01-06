@@ -30,12 +30,39 @@
 
     <h2 class="header">Book Information</h2>
     <form method="GET" action="">
+        <h3>Search Information</h3>
         <div>
             <label for="search">Search:</label>
-            <input type="text" id="search" name="title" placeholder="Enter your search term">
+            <input type="text" id="search" name="query" placeholder="Enter your search term">
             <button type="submit">Search</button>
         </div>
+        <p>Please select field to search:</p>
+        <div>
+            <input type="radio" id="id" name="field" value="id">
+            <label for="id">ID</label><br>
 
+            <input type="radio" id="title" name="field" value="title">
+            <label for="title">Title</label>
+
+            <input type="radio" id="author" name="field" value="author">
+            <label for="author">Author</label>
+
+            <input type="radio" id="category" name="field" value="category">
+            <label for="category">Category</label>
+
+            <input type="radio" id="edition" name="field" value="edition">
+            <label for="edition">Edition</label><br>
+
+            <input type="radio" id="publisher" name="field" value="publisher">
+            <label for="publisher">Publisher</label>
+
+            <input type="radio" id="year" name="field" value="year">
+            <label for="year">Year</label>
+
+            <input type="radio" id="storage" name="field" value="storage">
+            <label for="storage">Storage</label>
+
+        </div>
     </form>
     <?php
     // Connect to db
@@ -64,10 +91,27 @@
     LEFT JOIN 
         category c ON bc.cat_id = c.cat_id";
 
-        if (isset($_GET['title'])) {
-            $searchTitle = $_GET['title'];
-            $sql .= " WHERE b.book_title LIKE '%$searchTitle%' or b.book_edition LIKE '%$searchTitle%' or b.book_publisher LIKE '%$searchTitle%'";
+        if (isset($_GET['query']) and isset($_GET['field'])) {
+            $searchQuery = $_GET['query'];
+            $searchField = $_GET['field'];
+            switch ($searchField) {
+                case 'author':
+                    $sql .= ' WHERE a.au_name' . " LIKE '%" . $searchQuery . "%'";
+                    break;
+                case 'category':
+                    $sql .= ' WHERE c.cat_name' . " LIKE '%" . $searchQuery . "%'";
+                    break;
+                case 'storage':
+                    $sql .= ' WHERE b.sto_id' . " LIKE '%" . $searchQuery . "%'";
+                    break;
+                default:
+                    $sql .= " WHERE b.book_" . $searchField . " LIKE '%" . $searchQuery . "%'";
+                    break;
+
+            }
+
         }
+
         $sql .= " GROUP BY b.book_id;";
 
         $result = $conn->query($sql);
@@ -97,7 +141,7 @@
     if ($listOfBook->num_rows > 0) {
         // header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th></tr>";
+        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th><th>Action</th></tr>";
         // rows
         while ($row = $listOfBook->fetch_assoc()) {
             echo "<tr>";
@@ -109,6 +153,14 @@
             echo "<td>" . $row["book_edition"] . "</td>";
             echo "<td>" . $row["book_publisher"] . "</td>";
             echo "<td>" . $row["book_year"] . "</td>";
+
+            echo "<td>";
+            echo '<form method="POST" action="book/delete.php">';
+            echo '<input type="hidden" name="id" value="' . $row["book_id"] . '" />';
+            echo '<input type="submit" value="Delete" />';
+            echo '</form>';
+            echo "<a href='book/update.php?book_id={$row['book_id']}'>Update</a>";
+            echo "</td>";
             echo "</tr>";
         }
 
@@ -120,7 +172,7 @@
 
     <h2>Create New Book</h2>
 
-    <form action="book/create.php" method="post">
+    <form action="book/create.php" method="POST">
         <div>
             <label for="title">Title:</label>
             <input type="text" name="title" required>
@@ -182,6 +234,85 @@
 
         <input type="submit" value="Create Book">
     </form>
+
+
+    <h2>Edit Book</h2>
+
+
+    <?php
+    // Assume you have $bookDetails containing information about the book to be updated
+    // You can fetch this information based on the book ID
+    // Assuming $conn is already defined and connected
+    $bookID = 1; // Replace with the actual book ID
+    $bookDetails = getBookDetails($conn, $bookID); // Implement this function to get book details
+    ?>
+
+    <form action="book/update.php" method="POST">
+        <input type="hidden" name="bookID" value="<?php echo $bookDetails['book_id']; ?>">
+
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" name="title" value="<?php echo $bookDetails['book_title']; ?>" required>
+        </div>
+        <div>
+            <label for="edition">Edition:</label>
+            <input type="text" name="edition" value="<?php echo $bookDetails['book_edition']; ?>" required>
+        </div>
+
+        <div>
+            <label for="publisher">Publisher:</label>
+            <input type="text" name="publisher" value="<?php echo $bookDetails['book_publisher']; ?>" required>
+        </div>
+        <div>
+            <label for="year">Year:</label>
+            <input type="number" name="year" value="<?php echo $bookDetails['book_year']; ?>" required>
+        </div>
+        <div>
+            <label for="authorIDs">Authors:</label>
+            <select name="authorIDs[]" multiple required>
+                <?php
+                $listOfAuthor = getListAuthor($conn);
+                if ($listOfAuthor->num_rows > 0) {
+                    while ($author = $listOfAuthor->fetch_assoc()) {
+                        $selected = in_array($author['au_id'], $bookDetails['author_ids']) ? 'selected' : '';
+                        echo "<option value='{$author['au_id']}' $selected>{$author['au_name']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div>
+            <label for="categoryIDs">Categories:</label>
+            <select name="categoryIDs[]" multiple required>
+                <?php
+                $listOfCategories = getListCategory($conn);
+                if ($listOfCategories->num_rows > 0) {
+                    while ($category = $listOfCategories->fetch_assoc()) {
+                        $selected = in_array($category['cat_id'], $bookDetails['category_ids']) ? 'selected' : '';
+                        echo "<option value='{$category['cat_id']}' $selected>{$category['cat_name']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div>
+            <label for="storageID">Storage:</label>
+            <select name="storageID" required>
+                <?php
+                $listOfStorage = getListStorage($conn);
+                if ($listOfStorage->num_rows > 0) {
+                    while ($storage = $listOfStorage->fetch_assoc()) {
+                        $selected = ($storage['sto_id'] == $bookDetails['sto_id']) ? 'selected' : '';
+                        echo "<option value='{$storage['sto_id']}' $selected>{$storage['sto_shelf']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+        <input type="submit" value="Update Book">
+    </form>
+
 
 </body>
 

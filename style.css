@@ -212,9 +212,18 @@ form div select{
     padding-right: 8px;
 }
 
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;}
+
 /* select multiple */
 
 .select-multiple{
     height: 300px;
 }
 
+input[type="radio"] {
+    transform: scale(1.5); /* Adjust the scale factor as needed */
+    margin-right: 5px; /* Add some spacing between radio button and label */
+}

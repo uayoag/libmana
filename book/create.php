@@ -36,6 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo "Book created successfully!";
     // Redirect
-    // echo '<script>window.location.href = "../book.php";</script>';
+    echo '<script>window.location.href = "../book.php";</script>';
 }
 ?>

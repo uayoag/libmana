@@ -30,6 +30,7 @@
 
     <h2 class="header">Storage Information</h2>
     <form method="GET" action="">
+    <h3>Search Information</h3>
         <div>
             <label for="search">Search:</label>
             <input type="text" id="search" name="title" placeholder="Enter your search term">

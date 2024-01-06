@@ -30,62 +30,54 @@
 
     <h2 class="header">Author Information</h2>
     <form method="GET" action="">
+        <h3>Search Information</h3>
         <div>
             <label for="search">Search:</label>
-            <input type="text" id="search" name="title" placeholder="Enter your search term">
+            <input type="text" id="search" name="query" placeholder="Enter your search term">
             <button type="submit">Search</button>
         </div>
+        <p>Please select field to search:</p>
+        <div>
+            <input type="radio" id="name" name="field" value="name">
+            <label for="name">Name</label><br>
 
+            <input type="radio" id="address" name="field" value="cat_address">
+            <label for="address">Address</label>
+
+            <input type="radio" id="gender" name="field" value="gender">
+            <label for="gender">Gender</label>
+
+            <input type="radio" id="nationality" name="field" value="nationality">
+            <label for="nationality">Nationality</label>
+        </div>
     </form>
     <?php
     include 'db.php';
 
-    function getListBook($conn)
-    {
-        $sql = "SELECT 
-        b.book_id,
-        b.book_title,
-        b.book_edition,
-        b.book_publisher,
-        b.book_year,
-        b.sto_id,
-        GROUP_CONCAT(DISTINCT a.au_name ORDER BY a.au_name ASC SEPARATOR ', ') AS authors,
-        GROUP_CONCAT(DISTINCT c.cat_name ORDER BY c.cat_name ASC SEPARATOR ', ') AS categories
-    FROM
-        book b
-    LEFT JOIN 
-        book_author ba ON b.book_id = ba.book_id
-    LEFT JOIN 
-        author a ON ba.au_id = a.au_id
-    LEFT JOIN 
-        book_cate bc ON b.book_id = bc.book_id
-    LEFT JOIN 
-        category c ON bc.cat_id = c.cat_id";
-        $result = $conn->query($sql);
-        return $result;
-    }
-
     function getListAuthor($conn)
     {
-        $sql = "SELECT book.book_title, author.au_id, author.au_name, author.au_address, author.au_gender, author.au_nationality
-        FROM book
-        JOIN book_author ON book.book_id = book_author.book_id
-        JOIN author ON book_author.au_id = author.au_id";
+        $sql = "SELECT au_id, au_name, au_address, au_gender, au_nationality FROM author";
 
-        if (isset($_GET['title'])) {
-            $searchAuthor = $_GET['title'];
-            $sql .= " WHERE author.au_name LIKE '%$searchAuthor%'
-                        OR author.au_address LIKE '%$searchAuthor%'
-                        OR author.au_gender LIKE '%$searchAuthor%'
-                        OR author.au_nationality LIKE '%$searchAuthor%'
-                        OR book.book_title LIKE '%$searchAuthor%'";
+        if (isset($_GET['query']) && isset($_GET['field'])) {
+            $searchQuery = $_GET['query'];
+            $searchField = $_GET['field'];
+            switch ($searchField) {
+                case 'au_id':
+                case 'au_name':
+                case 'au_address':
+                case 'au_gender':
+                case 'au_nationality':
+                    $sql .= " WHERE " . $searchField . " LIKE '%" . $searchQuery . "%'";
+                    break;
+                default:
+                    // Handle other fields if needed
+                    break;
+            }
         }
 
         $result = $conn->query($sql);
         return $result;
     }
-
-
 
     $listOfAuthor = getListAuthor($conn);
 
