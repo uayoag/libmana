@@ -30,12 +30,6 @@
 
     <h2 class="header">Storage Information</h2>
     <form method="GET" action="">
-    <h3>Search Information</h3>
-        <div>
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="title" placeholder="Enter your search term">
-            <button type="submit">Search</button>
-        </div>
     </form>
     <?php
     include 'db.php';
@@ -68,12 +62,6 @@
     {
         $sql = "SELECT book.book_title, storage.* FROM book
                 JOIN storage ON book.sto_id = storage.sto_id";
-        if (isset($_GET['title'])) {
-            $searchStorage = $_GET['title'];
-            $sql .= " WHERE storage.sto_shelf LIKE '%$searchStorage%' 
-                      OR storage.sto_block LIKE '%$searchStorage%' 
-                      OR book.book_title LIKE '%$searchStorage%'";
-        }
         $result = $conn->query($sql);
         return $result;
     }

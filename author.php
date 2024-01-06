@@ -29,52 +29,12 @@
     </div>
 
     <h2 class="header">Author Information</h2>
-    <form method="GET" action="">
-        <h3>Search Information</h3>
-        <div>
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="query" placeholder="Enter your search term">
-            <button type="submit">Search</button>
-        </div>
-        <p>Please select field to search:</p>
-        <div>
-            <input type="radio" id="name" name="field" value="name">
-            <label for="name">Name</label><br>
-
-            <input type="radio" id="address" name="field" value="cat_address">
-            <label for="address">Address</label>
-
-            <input type="radio" id="gender" name="field" value="gender">
-            <label for="gender">Gender</label>
-
-            <input type="radio" id="nationality" name="field" value="nationality">
-            <label for="nationality">Nationality</label>
-        </div>
-    </form>
     <?php
     include 'db.php';
 
     function getListAuthor($conn)
     {
         $sql = "SELECT au_id, au_name, au_address, au_gender, au_nationality FROM author";
-
-        if (isset($_GET['query']) && isset($_GET['field'])) {
-            $searchQuery = $_GET['query'];
-            $searchField = $_GET['field'];
-            switch ($searchField) {
-                case 'au_id':
-                case 'au_name':
-                case 'au_address':
-                case 'au_gender':
-                case 'au_nationality':
-                    $sql .= " WHERE " . $searchField . " LIKE '%" . $searchQuery . "%'";
-                    break;
-                default:
-                    // Handle other fields if needed
-                    break;
-            }
-        }
-
         $result = $conn->query($sql);
         return $result;
     }

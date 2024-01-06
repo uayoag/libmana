@@ -28,8 +28,52 @@
         </ul>
     </div>
 <?php
-include '../db.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include '../db.php';
 
+    // Get form data
+    $bookID = $_POST["book_id"];
+    $title = $_POST["title"];
+    $edition = $_POST["edition"];
+    $publisher = $_POST["publisher"];
+    $year = $_POST["year"];
+    $authors = $_POST["authorIDs"];
+    $storageID = $_POST["storageID"];
+    $categories = $_POST["categoryIDs"];
+
+    // Update the book table
+    $sql = "UPDATE book 
+            SET sto_id = $storageID, 
+                book_edition = '$edition', 
+                book_publisher = '$publisher', 
+                book_year = '$year', 
+                book_title = '$title' 
+            WHERE book_id = $bookID;";
+
+    // Delete existing author and category associations
+    $sql .= "DELETE FROM book_author WHERE book_id = $bookID;";
+    $sql .= "DELETE FROM book_cate WHERE book_id = $bookID;";
+
+    // Insert into book_author for each author
+    foreach ($authors as $authorID) {
+        $sql .= "INSERT INTO book_author (au_id, book_id) VALUES ($authorID, $bookID);";
+    }
+
+    // Insert into book_cate for each category (assuming similar structure)
+    foreach ($categories as $categoryID) {
+        $sql .= "INSERT INTO book_cate (cat_id, book_id) VALUES ($categoryID, $bookID);";
+    }
+
+    // Execute the SQL statement
+    $conn->multi_query($sql);
+
+    // Close connection
+    $conn->close();
+
+    echo "Book updated successfully!";
+    // Redirect
+    echo '<script>window.location.href = "../book.php";</script>';
+}
 function getListAuthor($conn)
 {
     $sql = "SELECT au_id, au_name FROM author";
@@ -61,22 +105,17 @@ if (isset($_GET['book_id'])) {
         if ($result->num_rows == 1) {
             return $result->fetch_assoc();
         }
-
         return null;
     }
-
     // Get book details
     $bookDetails = getBookDetails($conn, $bookID);
-
     if ($bookDetails) {
-        // Include the update form
         ?>
-
-    <div class="wrap">
-        <div class="submitBox">
+<div class="wrap">
+    <div class="submitBox">
         <h2 class="header">Edit Book</h2>
-<form action="book/update.php" method="POST">
-    <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($bookDetails['book_id']); ?>">
+        <form action="book/update.php" method="POST">
+            <input type="hidden" name="bookID" value="<?php echo isset($bookDetails['book_id']) ? htmlspecialchars($bookDetails['book_id']) : ''; ?>">
 
     <div>
         <label for="title">Title:</label>
@@ -95,17 +134,33 @@ if (isset($_GET['book_id'])) {
         <input type="number" name="year" value="<?php echo htmlspecialchars($bookDetails['book_year']); ?>" required>
     </div>
     <div>
-        <label for="authorIDs">Authors:</label>
-        <select type="text" name="authorIDs" value="<?php echo htmlspecialchars($bookDetails['authors']); ?>" required>
-
-        </select>
-    </div>
+    <label for="authorIDs">Authors:</label>
+    <select multiple name="authorIDs[]" required>
+        <?php
+        $listOfAuthor = getListAuthor($conn);
+        if ($listOfAuthor->num_rows > 0) {
+            while ($author = $listOfAuthor->fetch_assoc()) {
+                $selected = (in_array($author['au_id'], $bookDetails['author_ids'])) ? 'selected' : '';
+                echo "<option value='{$author['au_id']}' $selected>{$author['au_name']}</option>";
+            }
+        }
+        ?>
+    </select>
+</div>
     <div>
-        <label for="categoryIDs">Categories:</label>
-        <select type="text" name="categoryIDs[]" value="<?php echo htmlspecialchars($bookDetails['categories']); ?>" required>
-
-        </select>
-    </div>
+    <label for="categoryIDs">Categories:</label>
+    <select multiple name="categoryIDs[]" required>
+        <?php
+        $listOfCategories = getListCategory($conn);
+        if ($listOfCategories->num_rows > 0) {
+            while ($category = $listOfCategories->fetch_assoc()) {
+                $selected = (in_array($category['cat_id'], $bookDetails['category_ids'])) ? 'selected' : '';
+                echo "<option value='{$category['cat_id']}' $selected>{$category['cat_name']}</option>";
+            }
+        }
+        ?>
+    </select>
+</div>
     <div>
         <label for="storageID">Storage:</label>
         <select type="text" name="storageID" required>
@@ -120,13 +175,10 @@ if (isset($_GET['book_id'])) {
             ?>
         </select>
     </div>
-</form>
             <div class="chooseBox">
             <input type="submit" name="submit" value="Update Book">
             </div>
         </form>
-
-
         <?php
     } else {
         echo "Book not found.";
@@ -135,6 +187,9 @@ if (isset($_GET['book_id'])) {
     echo "Invalid request. Book ID is missing.";
 }
 ?>
-
 </body>
 </html>
+<?php
+// Close the database connection at the end of the file
+$conn->close();
+?>

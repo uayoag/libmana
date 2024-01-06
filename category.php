@@ -20,23 +20,6 @@
 
     <h2 class="header">Category Information</h2>
     <form method="GET" action="">
-        <h3>Search Information</h3>
-        <div>
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="query" placeholder="Enter your search term">
-            <button type="submit">Search</button>
-        </div>
-        <p>Please select field to search:</p>
-        <div>
-            <input type="radio" id="name" name="field" value="cat_name">
-            <label for="name">Name</label><br>
-
-            <input type="radio" id="keyword" name="field" value="cat_keyword">
-            <label for="keyword">Key Word</label>
-
-            <input type="radio" id="language" name="field" value="cat_language">
-            <label for="language">Language</label>
-        </div>
     </form>
 
     <?php
@@ -45,22 +28,6 @@
     function getListCategory($conn)
     {
         $sql = "SELECT cat_id, cat_name, cat_keyword, cat_language FROM category";
-        
-        if (isset($_GET['query']) && isset($_GET['field'])) {
-            $searchQuery = $_GET['query'];
-            $searchField = $_GET['field'];
-            
-            switch ($searchField) {
-                case 'cat_name':
-                case 'cat_keyword':
-                case 'cat_language':
-                    $sql .= " WHERE " . $searchField . " LIKE '%" . $searchQuery . "%'";
-                    break;
-                default:
-                    break;
-            }
-        }
-
         $result = $conn->query($sql);
         return $result;
     }
