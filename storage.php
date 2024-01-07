@@ -7,7 +7,7 @@
     <title>Storage Page</title>
 </head>
 
-<body style="background: #e6a681;padding: 40px">
+<body style="background: #DED0B6;padding: 40px">
     <div id="menu">
         <ul>
             <li>
@@ -72,13 +72,19 @@
     if ($listOfStorage->num_rows > 0) {
         // header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Shelf</th><th>Block</th></tr>";
+        echo "<tr><th>ID</th><th>Shelf</th><th>Block</th><th>Delete</th></tr>";
         // rows
         while ($row = $listOfStorage->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $row["sto_id"] . "</td>";
             echo "<td>" . $row["sto_shelf"] . "</td>";
             echo "<td>" . $row["sto_block"] . "</td>";
+            echo "<td>";
+            echo '<form method="POST" action="book/delete.php">';
+            echo '<input type="hidden" name="id" value="' . $row["sto_id"] . '" />';
+            echo '<input class="submit-button delete" type="submit" value="Delete" />';
+            echo '</form>';
+            echo "</td>";
             echo "</tr>";
         }
         echo "</table>";

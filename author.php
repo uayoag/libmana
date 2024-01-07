@@ -7,7 +7,7 @@
     <title>Author Page</title>
 </head>
 
-<body style="background: #e6a681;padding: 40px">
+<body style="background: #DED0B6;padding: 40px">
     <div id="menu">
         <ul>
             <li>
@@ -44,7 +44,7 @@
     if ($listOfAuthor->num_rows > 0) {
         // header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Name</th><th>Address</th><th>Gender</th><th>Nationality</th></tr>";
+        echo "<tr><th>ID</th><th>Name</th><th>Address</th><th>Gender</th><th>Nationality</th><th>Delete</th></tr>";
         // rows
         while ($row = $listOfAuthor->fetch_assoc()) {
             echo "<tr>";
@@ -53,6 +53,12 @@
             echo "<td>" . $row["au_address"] . "</td>";
             echo "<td>" . $row["au_gender"] . "</td>";
             echo "<td>" . $row["au_nationality"] . "</td>";
+            echo "<td>";
+            echo '<form method="POST" action="book/delete.php">';
+            echo '<input type="hidden" name="id" value="' . $row["au_id"] . '" />';
+            echo '<input class="submit-button delete" type="submit" value="Delete" />';
+            echo '</form>';
+            echo "</td>";
             echo "</tr>";
         }
         echo "</table>";

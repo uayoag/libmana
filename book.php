@@ -7,7 +7,7 @@
     <title>Book Page</title>
 </head>
 
-<body style="background: #e6a681;padding: 40px">
+<body style="background: #DED0B6 ;padding: 40px">
     <div id="menu">
         <ul>
             <li>
@@ -36,7 +36,6 @@
             <input type="text" id="search" name="query" placeholder="Enter your search term">
             <button class="search-button" type="submit">Search</button>
         </div>
-        <p>Please select field to search:</p>
         <div>
             <input type="radio" id="id" name="field" value="id">
             <label for="id">ID</label><br>

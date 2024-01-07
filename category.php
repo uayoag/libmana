@@ -7,7 +7,7 @@
     <title>Category Page</title>
 </head>
 
-<body style="background: #e6a681; padding: 40px">
+<body style="background: #DED0B6; padding: 40px">
     <div id="menu">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -37,7 +37,7 @@
     if ($listOfCategory->num_rows > 0) {
         // Table header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Name</th><th>Keyword</th><th>Language</th></tr>";
+        echo "<tr><th>ID</th><th>Name</th><th>Keyword</th><th>Language</th><th>Delete</th></tr>";
 
         // Table rows
         while ($row = $listOfCategory->fetch_assoc()) {
@@ -46,6 +46,12 @@
             echo "<td>" . $row["cat_name"] . "</td>";
             echo "<td>" . $row["cat_keyword"] . "</td>";
             echo "<td>" . $row["cat_language"] . "</td>";
+            echo "<td>";
+            echo '<form method="POST" action="book/delete.php">';
+            echo '<input type="hidden" name="id" value="' . $row["cat_id"] . '" />';
+            echo '<input class="submit-button delete" type="submit" value="Delete" />';
+            echo '</form>';
+            echo "</td>";
             echo "</tr>";
         }
 

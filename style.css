@@ -7,11 +7,11 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-color: rosybrown;
+    background-color: #DED0B6;
 }
 
 #menu ul {
-    background: rgb(202, 166, 120);
+    background: #BBAB8C;
     list-style-type: none;
     text-align: center;
     padding: 0;
@@ -19,12 +19,12 @@ body {
 }
 
 #menu li {
-    color: #d4895d;
+    color: #FDF7E4;
     display: inline-block;
-    width: 120px;
+    width: 125px;
     height: 40px;
     line-height: 40px;
-    margin-left: -5px;
+    margin-left: 1px;
 }
 
 #menu a {
@@ -34,13 +34,13 @@ body {
 }
 
 #menu a:hover {
-    background: burlywood;
+    background: #FAEED1;
     color: #333;
 }
 
 .header {
-    background-color:blanchedalmond;
-    padding: 20px;
+    background-color:#FDF7E4;
+    padding: 15px;
 }
 
 .stepBox {
@@ -145,7 +145,7 @@ input, select {
 
 
 input:focus {
-    background-color: orange;
+    background-color: #EBE3D5;
     outline: none;
 }
 
@@ -235,7 +235,7 @@ input[type="radio"] {
     min-width: 100px;
     font-size: 14px;
     text-decoration: none;
-    margin: 12px 0;
+    margin: 10px 0;
     color: black;
     cursor: pointer;
     
@@ -243,27 +243,27 @@ input[type="radio"] {
 
 
 .submit-button.delete{
-    background-color: red;
+    background-color:  #B0A695;
     border: none;
     color: white;
 }
 
 
 .submit-button.update{
-    background-color: rgb(239, 140, 10);
+    background-color:  #B0A695;
     border: none;
     color: white;
 
 }
 
 .search-button{
-    background-color: green;
+    background-color: #B0A695;
     border-radius: 10px;
     padding: 12px;
 }
 
 .search-button:hover{
-    background-color: blue;
+    background-color: #F3EEEA;
     color: black;
 }
 
