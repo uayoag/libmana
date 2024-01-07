@@ -34,7 +34,7 @@
         <div>
             <label for="search">Search:</label>
             <input type="text" id="search" name="query" placeholder="Enter your search term">
-            <button type="submit">Search</button>
+            <button class="search-button" type="submit">Search</button>
         </div>
         <p>Please select field to search:</p>
         <div>
@@ -152,7 +152,7 @@
     if ($listOfBook->num_rows > 0) {
         // header
         echo "<table>";
-        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th><th>Action</th></tr>";
+        echo "<tr><th>ID</th><th>Title</th><th>Storage</th><th>Author</th><th>Category</th><th>Edition</th><th>Publisher</th><th>Year</th><th>Delete</th><th>Update</th></tr>";
         // rows
         while ($row = $listOfBook->fetch_assoc()) {
             echo "<tr>";
@@ -168,11 +168,10 @@
             echo "<td>";
             echo '<form method="POST" action="book/delete.php">';
             echo '<input type="hidden" name="id" value="' . $row["book_id"] . '" />';
-            echo '<input type="submit" value="Delete" />';
+            echo '<input class="submit-button delete" type="submit" value="Delete" />';
             echo '</form>';
-
-            echo "<a href='book/update.php?book_id={$row['book_id']}'>Update</a>";
             echo "</td>";
+            echo "<td>". "<a class='submit-button update' href='book/update.php?book_id={$row['book_id']}'>Update</a>". "</td>";
             echo "</tr>";
 
 

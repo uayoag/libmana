@@ -117,7 +117,7 @@ VALUES
 (12, 'Twelfth Edition', '876 Press', '2019', 'Horror Nightmares', 12),
 (13, 'Thirteenth Edition', '543 Publications', '2017', 'Self-Help Wonders', 13),
 (14, 'Fourteenth Edition', '210 Books', '2022', 'Journey to Unknown Lands', 14),
-(15, 'Fifteenth Edition', '999 Press', '2018', 'The Traveler\'s Diary', 15);
+(15, 'Fifteenth Edition', '999 Press', '2018', 'The Traveler's Diary', 15);
 
 INSERT INTO book_author (au_id, book_id)
 VALUES
