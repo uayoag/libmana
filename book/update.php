@@ -7,7 +7,7 @@
     <title>Update Book</title>
 </head>
 
-<body style="background: #e6a681;padding: 40px">
+<body style="background: #DED0B6;padding: 40px">
     <div id="menu">
         <ul>
             <li>
@@ -220,7 +220,7 @@
             if ($bookDetails) {
                 ?>
                 <div>
-                    <h2 class="header">Edit Book</h2>
+                    <h2 class="header">Update Book</h2>
                     <form action="" method="POST">
                         <input type="hidden" name="book_id"
                             value=" <?php echo isset($bookDetails['book_id']) ? htmlspecialchars($bookDetails['book_id']) : ''; ?>">

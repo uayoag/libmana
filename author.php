@@ -69,7 +69,7 @@
 
     <h2>Create New Author</h2>
 
-    <form action="author/create.php" method="post">
+    <form action="book/create.php" method="post">
         <div>
             <label for="name">Name:</label>
             <input type="text" name="name" required>

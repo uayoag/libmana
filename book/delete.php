@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $sql = "DELETE from book WHERE book_id = $deletedId;";
 
+
     // Get the ID of the newly inserted book
     $sql .= "SET @newBookID = LAST_INSERT_ID();";
 

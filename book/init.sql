@@ -67,20 +67,20 @@ VALUES
 
 INSERT INTO category (cat_id, cat_name, cat_keyword, cat_language)
 VALUES
-(1, 'Science Fiction', 'Sci-Fi', 'English'),
-(2, 'History', 'Historical', 'English'),
-(3, 'Mystery', 'Detective', 'English'),
-(4, 'Romance', 'Love Story', 'English'),
-(5, 'Biography', 'Life Story', 'English'),
-(6, 'Fantasy', 'Magical', 'English'),
-(7, 'Thriller', 'Suspenseful', 'English'),
-(8, 'Science', 'Scientific', 'English'),
-(9, 'Adventure', 'Exploration', 'English'),
-(10, 'Poetry', 'Poetic', 'English'),
-(11, 'Comedy', 'Funny', 'English'),
-(12, 'Drama', 'Serious', 'English'),
-(13, 'Horror', 'Scary', 'English'),
-(14, 'Self-Help', 'Motivational', 'English'),
+(1, 'Science Fiction', 'Sci-Fi', 'Vietnamese'),
+(2, 'History', 'Historical', 'Hungarian'),
+(3, 'Mystery', 'Detective', 'Lithuanian'),
+(4, 'Romance', 'Love Story', 'Danish'),
+(5, 'Biography', 'Life Story', 'Romanian'),
+(6, 'Fantasy', 'Magical', 'Thai'),
+(7, 'Thriller', 'Suspenseful', 'Portuguese'),
+(8, 'Science', 'Scientific', 'Italian'),
+(9, 'Adventure', 'Exploration', 'Russian'),
+(10, 'Poetry', 'Poetic', 'Korean'),
+(11, 'Comedy', 'Funny', 'German'),
+(12, 'Drama', 'Serious', 'Japanese'),
+(13, 'Horror', 'Scary', 'American'),
+(14, 'Self-Help', 'Motivational', 'Spanish'),
 (15, 'Travel', 'Journey', 'English');
 
 INSERT INTO storage (sto_id, sto_shelf, sto_block)
@@ -103,21 +103,21 @@ VALUES
 
 INSERT INTO book (book_id, book_edition, book_publisher, book_year, book_title, sto_id)
 VALUES
-(1, 'First Edition', 'ABC Publishers', '2020', 'The Mystery of the Lost Key', 1),
-(2, 'Second Edition', 'XYZ Publishers', '2018', 'Space Odyssey', 2),
-(3, 'Third Edition', '123 Publications', '2022', 'History of Ancient Civilization', 3),
-(4, 'Fourth Edition', '456 Books', '2019', 'Love Beyond Time', 4),
-(5, 'Fifth Edition', '789 Publishing', '2021', 'The Life of a Scientist', 5),
-(6, 'Sixth Edition', '321 Press', '2017', 'The Magical Kingdom', 6),
-(7, 'Seventh Edition', '987 Books', '2023', 'In the Shadows', 7),
-(8, 'Eighth Edition', '654 Publishers', '2016', 'Exploring New Frontiers', 8),
-(9, 'Ninth Edition', '876 Press', '2020', 'Poems of the Soul', 9),
-(10, 'Tenth Edition', '543 Publications', '2018', 'Laugh Out Loud', 10),
-(11, 'Eleventh Edition', '210 Books', '2021', 'Dramatic Tales', 11),
-(12, 'Twelfth Edition', '876 Press', '2019', 'Horror Nightmares', 12),
-(13, 'Thirteenth Edition', '543 Publications', '2017', 'Self-Help Wonders', 13),
-(14, 'Fourteenth Edition', '210 Books', '2022', 'Journey to Unknown Lands', 14),
-(15, 'Fifteenth Edition', '999 Press', '2018', 'The Traveler's Diary', 15);
+(1, 'First Edition', 'Penguin Random House', '2020', 'The Mystery of the Lost Key', 1),
+(2, 'Second Edition', 'HarperCollins', '2018', 'Space Odyssey', 2),
+(3, 'Third Edition', 'Simon & Schuster', '2022', 'History of Ancient Civilization', 3),
+(4, 'Fourth Edition', 'Hachette Book Group', '2019', 'Love Beyond Time', 4),
+(5, 'Fifth Edition', 'Oxford University Press', '2021', 'The Life of a Scientist', 5),
+(6, 'Sixth Edition', 'Penguin Classics', '2017', 'The Magical Kingdom', 6),
+(7, 'Seventh Edition', 'Routledge', '2023', 'In the Shadows', 7),
+(8, 'Eighth Edition', 'Little, Brown and Company', '2016', 'Exploring New Frontiers', 8),
+(9, 'Ninth Edition', 'Dark Horse Comics', '2020', 'Poems of the Soul', 9),
+(10, 'Tenth Edition', '	Kensington Publishing Corp.', '2018', 'Laugh Out Loud', 10),
+(11, 'Eleventh Edition', 'Graywolf Press', '2021', 'Dramatic Tales', 11),
+(12, 'Twelfth Edition', 'Open Book Publishers', '2019', 'Horror Nightmares', 12),
+(13, 'Thirteenth Edition', 'University Press of America', '2017', 'Self-Help Wonders', 13),
+(14, 'Fourteenth Edition', 'Melville House', '2022', 'Journey to Unknown Lands', 14),
+(15, 'Fifteenth Edition', 'Charlesbridge Publishing', '2018', 'The Traveler in Diary', 15);
 
 INSERT INTO book_author (au_id, book_id)
 VALUES
