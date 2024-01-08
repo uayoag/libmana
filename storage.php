@@ -34,30 +34,7 @@
     <?php
     include 'db.php';
 
-    function getListBook($conn)
-    {
-        $sql = "SELECT 
-        b.book_id,
-        b.book_title,
-        b.book_edition,
-        b.book_publisher,
-        b.book_year,
-        b.sto_id,
-        GROUP_CONCAT(DISTINCT a.au_name ORDER BY a.au_name ASC SEPARATOR ', ') AS authors,
-        GROUP_CONCAT(DISTINCT c.cat_name ORDER BY c.cat_name ASC SEPARATOR ', ') AS categories
-    FROM
-        book b
-    LEFT JOIN 
-        book_author ba ON b.book_id = ba.book_id
-    LEFT JOIN 
-        author a ON ba.au_id = a.au_id
-    LEFT JOIN 
-        book_cate bc ON b.book_id = bc.book_id
-    LEFT JOIN 
-        category c ON bc.cat_id = c.cat_id";
-        $result = $conn->query($sql);
-        return $result;
-    }
+
     function getListStorage($conn)
     {
         $sql = "SELECT book.book_title, storage.* FROM book
@@ -96,7 +73,7 @@
 
     <h2>Create New Storage</h2>
 
-    <form action="storage/create.php" method="post">
+    <form action="create_storage.php" method="post">
         <div>
             <label for="shelf">Shelf:</label>
             <input type="text" name="shelf" required>
