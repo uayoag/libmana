@@ -80,7 +80,7 @@
         GROUP_CONCAT(DISTINCT a.au_name ORDER BY a.au_name ASC SEPARATOR ', ') AS authors,
         GROUP_CONCAT(DISTINCT c.cat_name ORDER BY c.cat_name ASC SEPARATOR ', ') AS categories
     FROM
-        book b
+        book AS b
     LEFT JOIN 
         book_author ba ON b.book_id = ba.book_id
     LEFT JOIN 

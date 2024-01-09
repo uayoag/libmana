@@ -47,7 +47,7 @@
             echo "<td>" . $row["cat_keyword"] . "</td>";
             echo "<td>" . $row["cat_language"] . "</td>";
             echo "<td>";
-            echo '<form method="POST" action="">';
+            echo '<form method="POST" action="category/delete_category.php">';
             echo '<input type="hidden" name="id" value="' . $row["cat_id"] . '" />';
             echo '<input class="submit-button delete" type="submit" value="Delete" />';
             echo '</form>';
@@ -63,7 +63,7 @@
 
     <h2>Create New Category</h2>
 
-    <form action="create_category.php" method="post">
+    <form action="category/create_category.php" method="post">
         <div>
             <label for="name">Name:</label>
             <input type="text" name="name" required>

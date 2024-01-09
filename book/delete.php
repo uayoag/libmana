@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     $conn->close();
 
-    echo "Book updated successfully!";
+    echo "Book deleted successfully!";
     // Redirect
     echo '<script>window.location.href = "../book.php";</script>';
 }

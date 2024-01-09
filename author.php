@@ -54,7 +54,7 @@
             echo "<td>" . $row["au_gender"] . "</td>";
             echo "<td>" . $row["au_nationality"] . "</td>";
             echo "<td>";
-            echo '<form method="POST" action="">';
+            echo '<form method="POST" action="author/delete_author.php">';
             echo '<input type="hidden" name="id" value="' . $row["au_id"] . '" />';
             echo '<input class="submit-button delete" type="submit" value="Delete" />';
             echo '</form>';
@@ -69,7 +69,7 @@
 
     <h2>Create New Author</h2>
 
-    <form action="create_author.php" method="post">
+    <form action="author/create_author.php" method="post">
         <div>
             <label for="name">Name:</label>
             <input type="text" name="name" required>

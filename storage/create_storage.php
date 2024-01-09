@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include 'db.php';
+    include '../db.php';
     
     // Get form data
     $shelf = $_POST["shelf"];
@@ -18,6 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo "Storage created successfully!";
     // Redirect
-    echo '<script>window.location.href = "storage.php";</script>';
+    echo '<script>window.location.href = "../storage.php";</script>';
 }
 ?>

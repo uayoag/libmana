@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include 'db.php';
+    include '../db.php';
     
     // Get form data
     $name = $_POST["name"];
@@ -20,6 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo "Author created successfully!";
     // Redirect
-    echo '<script>window.location.href = "author.php";</script>';
+    echo '<script>window.location.href = "../author.php";</script>';
 }
 ?>

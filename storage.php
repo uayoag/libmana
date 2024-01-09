@@ -37,13 +37,10 @@
 
     function getListStorage($conn)
     {
-        $sql = "SELECT book.book_title, storage.* FROM book
-                JOIN storage ON book.sto_id = storage.sto_id";
+        $sql = "SELECT sto_id, sto_shelf, sto_block FROM storage";
         $result = $conn->query($sql);
         return $result;
     }
-    
-
     $listOfStorage = getListStorage($conn);
 
     if ($listOfStorage->num_rows > 0) {
@@ -57,7 +54,7 @@
             echo "<td>" . $row["sto_shelf"] . "</td>";
             echo "<td>" . $row["sto_block"] . "</td>";
             echo "<td>";
-            echo '<form method="POST" action="book/delete.php">';
+            echo '<form method="POST" action="storage/delete_storage.php">';
             echo '<input type="hidden" name="id" value="' . $row["sto_id"] . '" />';
             echo '<input class="submit-button delete" type="submit" value="Delete" />';
             echo '</form>';
@@ -73,7 +70,7 @@
 
     <h2>Create New Storage</h2>
 
-    <form action="create_storage.php" method="post">
+    <form action="storage/create_storage.php" method="post">
         <div>
             <label for="shelf">Shelf:</label>
             <input type="text" name="shelf" required>
